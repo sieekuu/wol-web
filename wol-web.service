@@ -1,0 +1,14 @@
+[Unit]
+Description=WoL Web (Flask via Gunicorn)
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/wol-web
+Environment="PATH=/home/pi/wol-web/.venv/bin" "APP_SECRET=change-me"
+ExecStart=/home/pi/wol-web/.venv/bin/gunicorn -b 0.0.0.0:5000 -w 2 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
