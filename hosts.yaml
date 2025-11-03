@@ -1,0 +1,14 @@
+# hosts.yaml
+hosts:
+  proxmox:
+    name: "Serwer Proxmox"
+    mac: "F8:B1:56:CC:36:12"
+    broadcast: "255.255.255.255"
+    port: 9
+    interface: ""   # ustaw IP interfejsu RPi, np. "192.168.1.10", zostaw puste aby użyć domyślnego
+  nas:
+    name: "Serwer NAS"
+    mac: "58:8B:F3:E0:6D:E0"
+    broadcast: "255.255.255.255"
+    port: 9
+    interface: ""
