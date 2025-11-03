@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Wake on LAN</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 2rem auto; }
+    .card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; }
+    button { padding: .5rem 1rem; }
+    input { padding: .4rem; width: 100%; margin: .2rem 0 .8rem; }
+    .row { display: flex; gap: 1rem; }
+    .row > div { flex: 1; }
+    ul { color: #333; }
+    .flash li { margin: .3rem 0; }
+  </style>
+</head>
+<body>
+  <h1>Wake on LAN</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="card flash">
+        <ul>
+          {% for m in messages %}
+            <li>{{ m }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card">
+    <h2>Zapisane urządzenia</h2>
+    {% if hosts %}
+      {% for key, h in hosts.items() %}
+        <form method="post" action="/wake/{{ key }}" style="margin-bottom:.5rem;">
+          <div class="row">
+            <div>
+              <strong>{{ h.name or key }}</strong><br>
+              MAC: {{ h.mac }}
+            </div>
+            <div>
+              Broadcast: {{ h.broadcast or "255.255.255.255" }}<br>
+              Port: {{ h.port or 9 }}{% if h.interface %}<br>Interfejs: {{ h.interface }}{% endif %}
+            </div>
+            <div style="align-self:center;">
+              <button type="submit">Wake</button>
+            </div>
+          </div>
+        </form>
+      {% endfor %}
+    {% else %}
+      Brak hostów — uzupełnij hosts.yaml.
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Formularz ręczny</h2>
+    <form method="post" action="/wake/manual">
+      <label>MAC adres</label>
+      <input name="mac" placeholder="00:11:22:33:44:55" required>
+      <div class="row">
+        <div>
+          <label>Broadcast</label>
+          <input name="broadcast" placeholder="255.255.255.255">
+        </div>
+        <div>
+          <label>Port</label>
+          <input name="port" type="number" value="9">
+        </div>
+        <div>
+          <label>Interfejs (IP RPi)</label>
+          <input name="interface" placeholder="192.168.1.2">
+        </div>
+      </div>
+      <button type="submit">Wyślij Magic Packet</button>
+    </form>
+  </div>
+</body>
+</html>
